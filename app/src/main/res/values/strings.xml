@@ -1,3 +1,19 @@
 <resources>
-    <string name="app_name">AppDietas</string>
+    <string name="app_name">Avita</string>
+    <string name="texto_slide1">
+        Redescubre tu bienestar.
+    </string>
+    <string name="titulo_slide2">
+        Comer bien es fácil
+    </string>
+    <string name="texto_slide2">
+        Planes de comida flexibles y recetas\n
+        deliciosas para conseguir tus objetivos con Avita.
+    </string>
+    <string name="titulo_slide3">
+        Empieza a cuidarte
+    </string>
+    <string name="boton_slide3">
+        Continuar
+    </string>
 </resources>
