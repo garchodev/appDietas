@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".LoginActivity">
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@id/etPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth="300dp"
+        android:singleLine="true"
+        android:maxLines="@integer/material_motion_duration_long_1"
+        android:textColorLink="#500F0F"
+        />
+
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:inputType="textPassword"
+        android:maxLines="@integer/material_motion_duration_long_1"
+        android:singleLine="true"
+        android:textColorLink="#500F0F"
+
+        app:layout_constraintBottom_toTopOf="@id/btInicioSesion"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight="wrap_content"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth="300dp" />
+
+    <Button
+        android:id="@+id/btInicioSesion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Iniciar Sesión"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/etPassword"
+        app:layout_constraintTop_toTopOf="parent"
+
+
+        app:layout_constraintVertical_bias="0.658" />
+
+    <Button
+        android:id="@+id/btRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="28dp"
+        android:onClick="@string/title_activity_register"
+
+        android:text="Registrarse"
+        app:layout_constraintStart_toEndOf="@+id/btInicioSesion"
+        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+
+    <TextView
+        android:id="@+id/tvUsuario"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="Usuario"
+        app:layout_constraintBottom_toTopOf="@+id/etUsername"
+        app:layout_constraintStart_toStartOf="@+id/etUsername"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/tvContraseña"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contraseña"
+        app:layout_constraintBottom_toTopOf="@+id/etPassword"
+        app:layout_constraintStart_toStartOf="@+id/etPassword"
+        app:layout_constraintTop_toBottomOf="@+id/etUsername"
+        tools:ignore="MissingConstraints" />
+
+
+    <ImageView
+        android:id="@+id/imgHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:contentDescription="Header"
+        android:padding="0dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight="200dp"
+        app:srcCompat="@drawable/footer"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
