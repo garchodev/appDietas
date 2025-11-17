@@ -1,0 +1,569 @@
+Index: .idea/.gitignore
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+deleted file mode 100644
+--- a/.idea/.gitignore	(revision 6882c1c85451aaafb9d398b0098677c6e27f19d0)
++++ /dev/null	(revision 6882c1c85451aaafb9d398b0098677c6e27f19d0)
+@@ -1,3 +0,0 @@
+-# Default ignored files
+-/shelf/
+-/workspace.xml
+Index: app/src/main/java/com/example/appdietas/ComidasDiaActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.appdietas;\r\n\r\nimport android.os.Bundle;\r\n\r\nimport androidx.activity.EdgeToEdge;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.graphics.Insets;\r\nimport androidx.core.view.ViewCompat;\r\nimport androidx.core.view.WindowInsetsCompat;\r\n\r\npublic class ComidasDiaActivity extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        EdgeToEdge.enable(this);\r\n        setContentView(R.layout.activity_comidas_dia);\r\n        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {\r\n            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());\r\n            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);\r\n            return insets;\r\n        });\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/appdietas/ComidasDiaActivity.java b/app/src/main/java/com/example/appdietas/ComidasDiaActivity.java
+--- a/app/src/main/java/com/example/appdietas/ComidasDiaActivity.java	(revision 6882c1c85451aaafb9d398b0098677c6e27f19d0)
++++ b/app/src/main/java/com/example/appdietas/ComidasDiaActivity.java	(date 1763366646193)
+@@ -1,24 +1,71 @@
+ package com.example.appdietas;
+ 
+ import android.os.Bundle;
++import android.view.View;
++import android.widget.ImageView;
++import android.widget.LinearLayout;
+ 
+-import androidx.activity.EdgeToEdge;
+ import androidx.appcompat.app.AppCompatActivity;
+-import androidx.core.graphics.Insets;
+-import androidx.core.view.ViewCompat;
+-import androidx.core.view.WindowInsetsCompat;
+ 
+ public class ComidasDiaActivity extends AppCompatActivity {
+ 
++    private LinearLayout headerIngredientes;
++    private LinearLayout contentIngredientes;
++
++    private LinearLayout headerInstrucciones;
++    private LinearLayout contentInstrucciones;
++
++    private ImageView arrowIngredientes;
++    private ImageView arrowInstrucciones;
++
++    private boolean ingredientesExpanded = false;
++    private boolean instruccionesExpanded = false;
++
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+-        EdgeToEdge.enable(this);
+         setContentView(R.layout.activity_comidas_dia);
+-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+-            return insets;
+-        });
++
++        // Referencias de ingredientes
++        headerIngredientes = findViewById(R.id.header_ingredientes);
++        contentIngredientes = findViewById(R.id.content_ingredientes);
++        arrowIngredientes = findViewById(R.id.arrow_ingredientes);
++
++        // Referencias de instrucciones
++        headerInstrucciones = findViewById(R.id.header_instrucciones);
++        contentInstrucciones = findViewById(R.id.content_instrucciones);
++        arrowInstrucciones = findViewById(R.id.arrow_instrucciones); // AGREGA este ImageView al layout XML
++
++        // Ocultar contenidos al inicio
++        contentIngredientes.setVisibility(View.GONE);
++        contentInstrucciones.setVisibility(View.GONE);
++
++        // Listener para ingredientes
++        headerIngredientes.setOnClickListener(v -> toggleIngredientes());
++
++        // Listener para instrucciones
++        headerInstrucciones.setOnClickListener(v -> toggleInstrucciones());
+     }
+-}
+\ No newline at end of file
++
++    private void toggleIngredientes() {
++        if (ingredientesExpanded) {
++            contentIngredientes.setVisibility(View.GONE);
++            arrowIngredientes.setRotation(0);
++        } else {
++            contentIngredientes.setVisibility(View.VISIBLE);
++            arrowIngredientes.setRotation(180);
++        }
++        ingredientesExpanded = !ingredientesExpanded;
++    }
++
++    private void toggleInstrucciones() {
++        if (instruccionesExpanded) {
++            contentInstrucciones.setVisibility(View.GONE);
++            arrowInstrucciones.setRotation(0);
++        } else {
++            contentInstrucciones.setVisibility(View.VISIBLE);
++            arrowInstrucciones.setRotation(180);
++        }
++        instruccionesExpanded = !instruccionesExpanded;
++    }
++}
+Index: app/src/main/java/com/example/appdietas/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.appdietas;\r\n\r\nimport android.os.Bundle;\r\n\r\nimport androidx.activity.EdgeToEdge;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.graphics.Insets;\r\nimport androidx.core.view.ViewCompat;\r\nimport androidx.core.view.WindowInsetsCompat;\r\n\r\npublic class MainActivity extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        EdgeToEdge.enable(this);\r\n        setContentView(R.layout.activity_main);\r\n        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {\r\n            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());\r\n            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);\r\n            return insets;\r\n        });\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/appdietas/MainActivity.java b/app/src/main/java/com/example/appdietas/MainActivity.java
+--- a/app/src/main/java/com/example/appdietas/MainActivity.java	(revision 6882c1c85451aaafb9d398b0098677c6e27f19d0)
++++ b/app/src/main/java/com/example/appdietas/MainActivity.java	(date 1763364925591)
+@@ -20,5 +20,9 @@
+             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+             return insets;
+         });
++
++
+     }
+-}
+\ No newline at end of file
++}
++
++
+Index: app/src/main/res/layout/activity_comidas_dia.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:id=\"@+id/main\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".ComidasDiaActivity\">\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_comidas_dia.xml b/app/src/main/res/layout/activity_comidas_dia.xml
+--- a/app/src/main/res/layout/activity_comidas_dia.xml	(revision 6882c1c85451aaafb9d398b0098677c6e27f19d0)
++++ b/app/src/main/res/layout/activity_comidas_dia.xml	(date 1763367042234)
+@@ -1,10 +1,305 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+-    android:id="@+id/main"
+     android:layout_width="match_parent"
+-    android:layout_height="match_parent"
+-    tools:context=".ComidasDiaActivity">
++    android:layout_height="match_parent">
++
++    <androidx.core.widget.NestedScrollView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:clipToPadding="false">
++
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:orientation="vertical">
++
++            <!-- CONTENEDOR PRINCIPAL PARA IMAGEN Y NUTRIENTES -->
++            <LinearLayout
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:orientation="vertical">
++
++                <!-- IMAGEN DE LA RECETA -->
++                <androidx.cardview.widget.CardView
++                    android:id="@+id/CVImagenReceta"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:layout_marginTop="16dp"
++                    android:layout_marginHorizontal="16dp"
++                    app:cardCornerRadius="8dp"
++                    app:cardElevation="4dp">
++
++                    <ImageView
++                        android:id="@+id/imagenReceta"
++                        android:layout_width="match_parent"
++                        android:layout_height="200dp"
++                        android:background="#E0E0E0"
++                        android:contentDescription="Imagen de la receta"
++                        android:scaleType="centerCrop"
++                        tools:src="@tools:sample/backgrounds/scenic" />
++
++                    <ImageButton
++                        android:id="@+id/btnBack"
++                        android:layout_width="53dp"
++                        android:layout_height="37dp"
++                        android:layout_gravity="start|top"
++                        android:layout_margin="8dp"
++                        android:background="#00FFFFFF"
++                        android:contentDescription="Volver"
++                        android:padding="8dp"
++                        android:scaleType="fitCenter"
++                        android:src="@drawable/flecha_izquierda" />
++
++                </androidx.cardview.widget.CardView>
++
++                <!-- BOTÓN DE RETROCESO SUPERPUESTO -->
++                <FrameLayout
++                    android:layout_width="match_parent"
++                    android:layout_height="0dp"
++                    android:layout_marginTop="-190dp"
++                    android:layout_marginBottom="190dp"
++                    android:layout_marginStart="16dp"
++                    android:layout_marginEnd="16dp">
++
++                </FrameLayout>
++
++                <!-- 1. INFORMACIÓN NUTRICIONAL (Tarjeta Azul) -->
++                <androidx.cardview.widget.CardView
++                    android:id="@+id/CVInfoNutrientes"
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:layout_margin="16dp"
++                    app:cardBackgroundColor="#FF9800"
++                    app:cardCornerRadius="8dp"
++                    app:cardElevation="4dp">
++
++                    <LinearLayout
++                        android:layout_width="match_parent"
++                        android:layout_height="wrap_content"
++                        android:background="@color/lightblue"
++                        android:orientation="vertical"
++                        android:padding="16dp">
++
++                        <TextView
++                            android:layout_width="wrap_content"
++                            android:layout_height="wrap_content"
++                            android:paddingBottom="8dp"
++                            android:text="INFORMACIÓN NUTRICIONAL"
++                            android:textColor="@color/white"
++                            android:textSize="16sp"
++                            android:textStyle="bold" />
++
++                        <TextView
++                            android:layout_width="match_parent"
++                            android:layout_height="wrap_content"
++                            android:paddingBottom="8dp"
++                            android:text="Por porción"
++                            android:textColor="@color/white" />
++
++                        <!-- Separadores y Valores -->
++                        <LinearLayout
++                            android:layout_width="match_parent"
++                            android:layout_height="wrap_content"
++                            android:orientation="horizontal"
++                            android:paddingVertical="8dp">
++
++                            <TextView
++                                android:layout_width="0dp"
++                                android:layout_height="wrap_content"
++                                android:layout_weight="1"
++                                android:text="Carbohidratos"
++                                android:textColor="@color/white" />
++
++                            <TextView
++                                android:layout_width="wrap_content"
++                                android:layout_height="wrap_content"
++                                android:text="22 g"
++                                android:textColor="@color/white"
++                                android:textStyle="bold" />
++                        </LinearLayout>
++
++                        <View
++                            android:layout_width="match_parent"
++                            android:layout_height="1dp"
++                            android:alpha="0.5"
++                            android:background="#FFFFFF" />
++
++                        <LinearLayout
++                            android:layout_width="match_parent"
++                            android:layout_height="wrap_content"
++                            android:orientation="horizontal"
++                            android:paddingVertical="8dp">
++
++                            <TextView
++                                android:layout_width="0dp"
++                                android:layout_height="wrap_content"
++                                android:layout_weight="1"
++                                android:text="Proteínas"
++                                android:textColor="@color/white" />
++
++                            <TextView
++                                android:layout_width="wrap_content"
++                                android:layout_height="wrap_content"
++                                android:text="7 g"
++                                android:textColor="@color/white"
++                                android:textStyle="bold" />
++                        </LinearLayout>
++
++                        <View
++                            android:layout_width="match_parent"
++                            android:layout_height="1dp"
++                            android:alpha="0.5"
++                            android:background="#FFFFFF" />
++
++                        <LinearLayout
++                            android:layout_width="match_parent"
++                            android:layout_height="wrap_content"
++                            android:orientation="horizontal"
++                            android:paddingVertical="8dp">
++
++                            <TextView
++                                android:layout_width="0dp"
++                                android:layout_height="wrap_content"
++                                android:layout_weight="1"
++                                android:text="Lípidos"
++                                android:textColor="@color/white" />
++
++                            <TextView
++                                android:layout_width="wrap_content"
++                                android:layout_height="wrap_content"
++                                android:text="16 g"
++                                android:textColor="@color/white"
++                                android:textStyle="bold" />
++                        </LinearLayout>
++                    </LinearLayout>
++                </androidx.cardview.widget.CardView>
++
++            </LinearLayout>
++
++            <!-- 2. INGREDIENTES -->
++            <LinearLayout
++                android:id="@+id/header_ingredientes"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:orientation="horizontal"
++                android:paddingHorizontal="16dp"
++                android:paddingVertical="12dp"
++                android:gravity="center_vertical"
++                android:clickable="true"
++                android:focusable="true"
++                android:background="?attr/selectableItemBackground">
++
++                <TextView
++                    android:id="@+id/tvIngredientes"
++                    android:layout_width="0dp"
++                    android:layout_height="wrap_content"
++                    android:layout_weight="1"
++                    android:text="INGREDIENTES"
++                    android:textSize="18sp"
++                    android:textStyle="bold" />
++
++                <ImageView
++                    android:id="@+id/arrow_ingredientes"
++                    android:layout_width="24dp"
++                    android:layout_height="24dp"
++                    android:layout_gravity="end"
++                    android:padding="4dp"
++                    android:src="@drawable/icon_flecha" />
++
++            </LinearLayout>
++
++            <LinearLayout
++                android:id="@+id/content_ingredientes"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:orientation="vertical"
++                android:paddingHorizontal="16dp"
++                android:paddingBottom="24dp"
++                android:visibility="gone">
++
++                <TextView
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:paddingVertical="8dp"
++                    android:text="ingrediente\nnumero de g" />
++
++                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
++
++                <TextView
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:paddingVertical="8dp"
++                    android:text="Ingrediente\nnumero de ml" />
++
++                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
++
++                <TextView
++                    android:layout_width="wrap_content"
++                    android:layout_height="wrap_content"
++                    android:paddingVertical="8dp"
++                    android:text="Ingrediente\nnumero de g" />
++            </LinearLayout>
++
++            <!-- 3. INSTRUCCIONES -->
++            <LinearLayout
++                android:id="@+id/header_instrucciones"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:orientation="horizontal"
++                android:paddingHorizontal="16dp"
++                android:paddingVertical="12dp"
++                android:gravity="center_vertical"
++                android:clickable="true"
++                android:focusable="true"
++                android:background="?attr/selectableItemBackground">
++
++                <TextView
++                    android:layout_width="0dp"
++                    android:layout_weight="1"
++                    android:layout_height="wrap_content"
++                    android:text="INSTRUCCIONES"
++                    android:textSize="18sp"
++                    android:textStyle="bold" />
++
++                <ImageView
++                    android:id="@+id/arrow_instrucciones"
++                    android:layout_width="24dp"
++                    android:layout_height="24dp"
++                    android:layout_gravity="end"
++                    android:padding="4dp"
++                    android:src="@drawable/icon_flecha" />
+ 
+-</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
++            </LinearLayout>
++
++            <LinearLayout
++                android:id="@+id/content_instrucciones"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:orientation="vertical"
++                android:paddingHorizontal="16dp"
++                android:paddingBottom="300dp"
++                android:visibility="gone">
++
++                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textStyle="bold" android:text="PASO 1" android:paddingTop="8dp"/>
++
++                <TextView
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:paddingBottom="16dp"
++                    android:text="Aqui vamos escribiendo paso por paso como hacemos" />
++
++                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textStyle="bold" android:text="PASO 2" />
++
++                <TextView
++                    android:layout_width="match_parent"
++                    android:layout_height="wrap_content"
++                    android:paddingBottom="16dp"
++                    android:text="Aqui vamos escribiendo paso por paso como hacemos" />
++
++            </LinearLayout>
++
++        </LinearLayout>
++    </androidx.core.widget.NestedScrollView>
++</FrameLayout>
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\">\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\r\n        android:fullBackupContent=\"@xml/backup_rules\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.AppDietas\">\r\n        <activity\r\n            android:name=\".CambiarComidaActivity\"\r\n            android:exported=\"false\" />\r\n        <activity\r\n            android:name=\".ComidasDiaActivity\"\r\n            android:exported=\"false\" />\r\n\r\n        <activity\r\n            android:name=\".LandingActivity\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n\r\n        <activity\r\n            android:name=\".MainActivity\"\r\n            android:exported=\"false\">\r\n        </activity>\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision 6882c1c85451aaafb9d398b0098677c6e27f19d0)
++++ b/app/src/main/AndroidManifest.xml	(date 1763368038917)
+@@ -16,7 +16,14 @@
+             android:exported="false" />
+         <activity
+             android:name=".ComidasDiaActivity"
+-            android:exported="false" />
++            android:exported="true">
++
++        <intent-filter>
++            <action android:name="android.intent.action.MAIN" />
++            <category android:name="android.intent.category.LAUNCHER" />
++        </intent-filter>
++        </activity>
++
+ 
+         <activity
+             android:name=".LandingActivity"
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    alias(libs.plugins.android.application)\r\n}\r\n\r\nandroid {\r\n    namespace = \"com.example.appdietas\"\r\n    compileSdk = 36\r\n\r\n    defaultConfig {\r\n        applicationId = \"com.example.appdietas\"\r\n        minSdk = 34\r\n        targetSdk = 36\r\n        versionCode = 1\r\n        versionName = \"1.0\"\r\n\r\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            isMinifyEnabled = false\r\n            proguardFiles(\r\n                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\r\n                \"proguard-rules.pro\"\r\n            )\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility = JavaVersion.VERSION_11\r\n        targetCompatibility = JavaVersion.VERSION_11\r\n    }\r\n}\r\n\r\ndependencies {\r\n\r\n    implementation(libs.appcompat)\r\n    implementation(libs.material)\r\n    implementation(libs.activity)\r\n    implementation(libs.constraintlayout)\r\n    implementation(libs.viewpager2)\r\n    implementation(libs.cardview)\r\n    testImplementation(libs.junit)\r\n    androidTestImplementation(libs.ext.junit)\r\n    androidTestImplementation(libs.espresso.core)\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	(revision 6882c1c85451aaafb9d398b0098677c6e27f19d0)
++++ b/app/build.gradle.kts	(date 1763291648660)
+@@ -39,6 +39,7 @@
+     implementation(libs.constraintlayout)
+     implementation(libs.viewpager2)
+     implementation(libs.cardview)
++    implementation(libs.fragment)
+     testImplementation(libs.junit)
+     androidTestImplementation(libs.ext.junit)
+     androidTestImplementation(libs.espresso.core)
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_21\" default=\"true\" project-jdk-name=\"jbr-21\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 6882c1c85451aaafb9d398b0098677c6e27f19d0)
++++ b/.idea/misc.xml	(date 1763364638933)
+@@ -1,4 +1,3 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="ExternalStorageConfigurationManager" enabled="true" />
+   <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="jbr-21" project-jdk-type="JavaSDK">
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"VcsDirectoryMappings\">\r\n    <mapping directory=\"$PROJECT_DIR$\" vcs=\"Git\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+--- a/.idea/vcs.xml	(revision 6882c1c85451aaafb9d398b0098677c6e27f19d0)
++++ b/.idea/vcs.xml	(date 1763291745875)
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="VcsDirectoryMappings">
+-    <mapping directory="$PROJECT_DIR$" vcs="Git" />
++    <mapping directory="" vcs="Git" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: gradle/libs.versions.toml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[versions]\r\nagp = \"8.13.1\"\r\njunit = \"4.13.2\"\r\njunitVersion = \"1.3.0\"\r\nespressoCore = \"3.7.0\"\r\nappcompat = \"1.7.1\"\r\nmaterial = \"1.13.0\"\r\nactivity = \"1.11.0\"\r\nconstraintlayout = \"2.2.1\"\r\nviewpager2 = \"1.1.0\"\r\ncardview = \"1.0.0\"\r\n\r\n[libraries]\r\njunit = { group = \"junit\", name = \"junit\", version.ref = \"junit\" }\r\next-junit = { group = \"androidx.test.ext\", name = \"junit\", version.ref = \"junitVersion\" }\r\nespresso-core = { group = \"androidx.test.espresso\", name = \"espresso-core\", version.ref = \"espressoCore\" }\r\nappcompat = { group = \"androidx.appcompat\", name = \"appcompat\", version.ref = \"appcompat\" }\r\nmaterial = { group = \"com.google.android.material\", name = \"material\", version.ref = \"material\" }\r\nactivity = { group = \"androidx.activity\", name = \"activity\", version.ref = \"activity\" }\r\nconstraintlayout = { group = \"androidx.constraintlayout\", name = \"constraintlayout\", version.ref = \"constraintlayout\" }\r\nviewpager2 = { group = \"androidx.viewpager2\", name = \"viewpager2\", version.ref = \"viewpager2\" }\r\ncardview = { group = \"androidx.cardview\", name = \"cardview\", version.ref = \"cardview\" }\r\n\r\n[plugins]\r\nandroid-application = { id = \"com.android.application\", version.ref = \"agp\" }\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/gradle/libs.versions.toml b/gradle/libs.versions.toml
+--- a/gradle/libs.versions.toml	(revision 6882c1c85451aaafb9d398b0098677c6e27f19d0)
++++ b/gradle/libs.versions.toml	(date 1763291652625)
+@@ -9,6 +9,7 @@
+ constraintlayout = "2.2.1"
+ viewpager2 = "1.1.0"
+ cardview = "1.0.0"
++fragment = "1.8.9"
+ 
+ [libraries]
+ junit = { group = "junit", name = "junit", version.ref = "junit" }
+@@ -20,6 +21,7 @@
+ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+ viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
+ cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
++fragment = { group = "androidx.fragment", name = "fragment", version.ref = "fragment" }
+ 
+ [plugins]
+ android-application = { id = "com.android.application", version.ref = "agp" }
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"GradleSettings\">\r\n    <option name=\"linkedExternalProjectsSettings\">\r\n      <GradleProjectSettings>\r\n        <option name=\"testRunner\" value=\"CHOOSE_PER_TEST\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"gradleJvm\" value=\"#GRADLE_LOCAL_JAVA_HOME\" />\r\n        <option name=\"modules\">\r\n          <set>\r\n            <option value=\"$PROJECT_DIR$\" />\r\n            <option value=\"$PROJECT_DIR$/app\" />\r\n          </set>\r\n        </option>\r\n      </GradleProjectSettings>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+--- a/.idea/gradle.xml	(revision 6882c1c85451aaafb9d398b0098677c6e27f19d0)
++++ b/.idea/gradle.xml	(date 1763298413483)
+@@ -1,5 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="GradleMigrationSettings" migrationVersion="1" />
+   <component name="GradleSettings">
+     <option name="linkedExternalProjectsSettings">
+       <GradleProjectSettings>
