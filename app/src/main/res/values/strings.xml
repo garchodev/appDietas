@@ -26,5 +26,6 @@
     <string name="viernes">Viernes</string>
     <string name="sabado">Sábado</string>
     <string name="domingo">Domingo</string>
+    <string name="title_activity_register">teta</string>
 
 </resources>

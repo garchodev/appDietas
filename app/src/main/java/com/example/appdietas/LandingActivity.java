@@ -70,7 +70,7 @@ public class LandingActivity extends AppCompatActivity {
                             SharedPreferences.Editor editor = getSharedPreferences("appPrefs", MODE_PRIVATE).edit();
                             editor.putBoolean("isFirstRun", false);
                             editor.apply();
-                            Intent intent = new Intent(LandingActivity.this, MainActivity.class);
+                            Intent intent = new Intent(LandingActivity.this, LoginActivity.class);
                             startActivity(intent);
                             finish();
                         });
