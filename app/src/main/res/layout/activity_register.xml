@@ -5,7 +5,39 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterActivity">
+    tools:context=".register.RegisterActivity">
+
+    <TextView
+        android:id="@+id/tvTituloRegistro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Registrate en DietAI! "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="96dp"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="@color/orange"
+
+        />
+    <TextView
+        android:id="@+id/tvSubtituloRegistro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Completa los siguientes campos para crear una cuenta "
+        android:textSize="16sp"
+        android:textColor="@color/dark_gray"
+        android:height="52dp"
+        android:width="290dp"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTituloRegistro"
+        android:layout_marginTop="10dp"
+        />
+
+
     <EditText
         android:id="@+id/editTextUsername"
         android:layout_width="0dp"
@@ -17,7 +49,7 @@
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tvSubtituloRegistro" />
 
     <EditText
         android:id="@+id/editTextEmail"
@@ -30,7 +62,11 @@
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextUsername" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextUsername"
+
+
+
+        />
 
     <EditText
         android:id="@+id/editTextPassword"
@@ -68,5 +104,7 @@
         android:text="Registrarse"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword"
+        android:backgroundTint="@color/black"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,8 +9,8 @@
         <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/../../../../../../FORMACIÓN/DAM/DAM 2/Desarollo Multimedia/Entregas/Entrega 4 - DietaAI" />
+            <option value="$PROJECT_DIR$/../../../../../../FORMACIÓN/DAM/DAM 2/Desarollo Multimedia/Entregas/Entrega 4 - DietaAI/app" />
           </set>
         </option>
       </GradleProjectSettings>

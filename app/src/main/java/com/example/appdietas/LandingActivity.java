@@ -9,10 +9,9 @@ import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.example.appdietas.login.LoginActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +35,7 @@ public class LandingActivity extends AppCompatActivity {
         if (isFirstRun) {
             // !isFirstRun para la version FINAL IMPORTANTEEEEEE
             // Ya ha abierto la app antes → ir directamente al MainActivity
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
             return;
         }

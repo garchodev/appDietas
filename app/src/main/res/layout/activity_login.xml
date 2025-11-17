@@ -6,22 +6,78 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context=".login.LoginActivity">
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/etUsername"
+    <TextView
+        android:id="@+id/tvTituloInicio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
+        android:padding="10dp"
+        android:text="Bienvenido a DietAI!"
+        android:textAlignment="center"
+        android:textColor="@color/orange"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:width="270dp"
+        android:text="La mejor aplicacion para tener una dieta saludable y balanceada"
+        android:textAlignment="center"
+        android:textColor="@color/dark_gray"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/tvTituloInicio"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tvEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="1dp"
+        android:text="Correo Electronico"
+        app:layout_constraintBottom_toTopOf="@+id/etEmail"
+        app:layout_constraintStart_toStartOf="@+id/etEmail"
+        app:layout_constraintWidth="wrap_content"
+        tools:ignore="MissingConstraints" />
+
+
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="170dp"
         android:layout_marginBottom="20dp"
+        android:inputType="textEmailAddress"
+        android:maxLines="@integer/material_motion_duration_long_1"
+        android:singleLine="true"
         app:layout_constraintBottom_toTopOf="@id/etPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTituloInicio"
         app:layout_constraintWidth="300dp"
-        android:singleLine="true"
-        android:maxLines="@integer/material_motion_duration_long_1"
-        android:textColorLink="#500F0F"
         />
+
+    <TextView
+        android:id="@+id/tvContraseña"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="2dp"
+        android:text="Contraseña"
+        app:layout_constraintBottom_toTopOf="@+id/etPassword"
+        app:layout_constraintStart_toStartOf="@+id/etPassword"
+        app:layout_constraintTop_toBottomOf="@+id/etEmail"
+        tools:ignore="MissingConstraints" />
 
 
     <androidx.appcompat.widget.AppCompatEditText
@@ -32,8 +88,6 @@
         android:inputType="textPassword"
         android:maxLines="@integer/material_motion_duration_long_1"
         android:singleLine="true"
-        android:textColorLink="#500F0F"
-
         app:layout_constraintBottom_toTopOf="@id/btInicioSesion"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight="wrap_content"
@@ -45,58 +99,33 @@
         android:id="@+id/btInicioSesion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:backgroundTint="@color/orange"
         android:text="Iniciar Sesión"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/etPassword"
-        app:layout_constraintTop_toTopOf="parent"
-
-
-        app:layout_constraintVertical_bias="0.658" />
+        app:layout_constraintEnd_toStartOf="@id/btRegister"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etPassword" />
 
     <Button
         android:id="@+id/btRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="28dp"
-        android:onClick="@string/title_activity_register"
-
+        android:backgroundTint="@color/black"
         android:text="Registrarse"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btInicioSesion"
         app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 
-    <TextView
-        android:id="@+id/tvUsuario"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="Usuario"
-        app:layout_constraintBottom_toTopOf="@+id/etUsername"
-        app:layout_constraintStart_toStartOf="@+id/etUsername"
-        tools:ignore="MissingConstraints" />
-
-    <TextView
-        android:id="@+id/tvContraseña"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Contraseña"
-        app:layout_constraintBottom_toTopOf="@+id/etPassword"
-        app:layout_constraintStart_toStartOf="@+id/etPassword"
-        app:layout_constraintTop_toBottomOf="@+id/etUsername"
-        tools:ignore="MissingConstraints" />
 
 
-    <ImageView
-        android:id="@+id/imgHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:contentDescription="Header"
-        android:padding="0dp"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHeight="200dp"
-        app:srcCompat="@drawable/footer"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp" />
+
+
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

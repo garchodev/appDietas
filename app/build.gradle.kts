@@ -33,6 +33,13 @@ android {
 
 dependencies {
 
+
+    // Retrofit - Para hacer las llamadas a la API
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    // Gson Converter - Para convertir automáticamente JSON a Objetos Kotlin/Java
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -43,4 +50,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
 }
