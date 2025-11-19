@@ -48,7 +48,7 @@ public class ComidasDiaActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        ImageButton btnBack = findViewById(R.id.btnBack);
+        ImageView btnBack = findViewById(R.id.btnVolver);
         btnBack.setOnClickListener(v -> finish());
 
 
