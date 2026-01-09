@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.viewpager2)
     implementation(libs.cardview)
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation(libs.fragment)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
