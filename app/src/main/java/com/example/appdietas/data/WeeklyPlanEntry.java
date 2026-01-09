@@ -1,5 +1,6 @@
 package com.example.appdietas.data;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
@@ -17,10 +18,11 @@ import androidx.room.Index;
 )
 public class WeeklyPlanEntry {
     private int day;
+    @NonNull
     private String tipo;
     private long comidaId;
 
-    public WeeklyPlanEntry(int day, String tipo, long comidaId) {
+    public WeeklyPlanEntry(int day, @NonNull String tipo, long comidaId) {
         this.day = day;
         this.tipo = tipo;
         this.comidaId = comidaId;
@@ -38,7 +40,7 @@ public class WeeklyPlanEntry {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(@NonNull String tipo) {
         this.tipo = tipo;
     }
 
