@@ -48,6 +48,8 @@ dependencies {
     implementation(libs.cardview)
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation(libs.fragment)
+    implementation("androidx.room:room-runtime:2.7.0")
+    annotationProcessor("androidx.room:room-compiler:2.7.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
