@@ -1,34 +1,70 @@
 package com.example.appdietas;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.widget.Button;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.content.Intent;
-import android.widget.Button;
-
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.List;
+
 public class ComidasDiaActivity extends AppCompatActivity {
 
-    private LinearLayout headerIngredientes;
-    private LinearLayout contentIngredientes;
-
-    private LinearLayout headerInstrucciones;
-    private LinearLayout contentInstrucciones;
-
-    private ImageView arrowIngredientes;
-    private ImageView arrowInstrucciones;
-
-    private boolean ingredientesExpanded = false;
-    private boolean instruccionesExpanded = false;
+    public static final String EXTRA_DIA_ID = "EXTRA_DIA_ID";
+    public static final String EXTRA_TIPO_COMIDA = "EXTRA_TIPO_COMIDA";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comidas_dia);
 
+        int diaId = getIntent().getIntExtra(EXTRA_DIA_ID, 1);
+
+        LinearLayout mealsContainer = findViewById(R.id.meals_container);
+        ComidasDbHelper dbHelper = new ComidasDbHelper(this);
+        List<Comida> comidasDia = dbHelper.getComidasForDia(diaId);
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        for (Comida comida : comidasDia) {
+            LinearLayout mealView = (LinearLayout) inflater.inflate(
+                    R.layout.item_comida,
+                    mealsContainer,
+                    false
+            );
+
+            ImageView imagen = mealView.findViewById(R.id.meal_image);
+            TextView tipo = mealView.findViewById(R.id.meal_type);
+            TextView nombre = mealView.findViewById(R.id.meal_name);
+            TextView descripcion = mealView.findViewById(R.id.meal_description);
+            TextView calorias = mealView.findViewById(R.id.meal_calories);
+            TextView carbohidratos = mealView.findViewById(R.id.meal_carbs);
+            TextView proteinas = mealView.findViewById(R.id.meal_protein);
+            TextView lipidos = mealView.findViewById(R.id.meal_fats);
+            Button cambiarComida = mealView.findViewById(R.id.button_cambiar_comida);
+
+            imagen.setImageResource(comida.getImagenResId());
+            tipo.setText(comida.getTipo());
+            nombre.setText(comida.getNombre());
+            descripcion.setText(comida.getDescripcion());
+            calorias.setText(getString(R.string.calorias_format, comida.getCalorias()));
+            carbohidratos.setText(getString(R.string.gramos_format, comida.getCarbohidratos()));
+            proteinas.setText(getString(R.string.gramos_format, comida.getProteinas()));
+            lipidos.setText(getString(R.string.gramos_format, comida.getLipidos()));
+
+            cambiarComida.setOnClickListener(view -> {
+                Intent intent = new Intent(ComidasDiaActivity.this, CambiarComidaActivity.class);
+                intent.putExtra(EXTRA_DIA_ID, diaId);
+                intent.putExtra(EXTRA_TIPO_COMIDA, comida.getTipo());
+                startActivity(intent);
+            });
+
+            mealsContainer.addView(mealView);
+        }
         // Referencias de ingredientes
         headerIngredientes = findViewById(R.id.header_ingredientes);
         contentIngredientes = findViewById(R.id.content_ingredientes);
@@ -55,38 +91,5 @@ public class ComidasDiaActivity extends AppCompatActivity {
 
         ImageView btnBack = findViewById(R.id.btnVolver);
         btnBack.setOnClickListener(v -> finish());
-
-
-        // Ocultar contenidos al inicio
-        contentIngredientes.setVisibility(View.GONE);
-        contentInstrucciones.setVisibility(View.GONE);
-
-        // Listener para ingredientes
-        headerIngredientes.setOnClickListener(v -> toggleIngredientes());
-
-        // Listener para instrucciones
-        headerInstrucciones.setOnClickListener(v -> toggleInstrucciones());
-    }
-
-    private void toggleIngredientes() {
-        if (ingredientesExpanded) {
-            contentIngredientes.setVisibility(View.GONE);
-            arrowIngredientes.setRotation(0);
-        } else {
-            contentIngredientes.setVisibility(View.VISIBLE);
-            arrowIngredientes.setRotation(180);
-        }
-        ingredientesExpanded = !ingredientesExpanded;
-    }
-
-    private void toggleInstrucciones() {
-        if (instruccionesExpanded) {
-            contentInstrucciones.setVisibility(View.GONE);
-            arrowInstrucciones.setRotation(0);
-        } else {
-            contentInstrucciones.setVisibility(View.VISIBLE);
-            arrowInstrucciones.setRotation(180);
-        }
-        instruccionesExpanded = !instruccionesExpanded;
     }
 }

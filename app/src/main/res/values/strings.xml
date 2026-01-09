@@ -19,6 +19,8 @@
     <string name="desayuno">Desayuno</string>
     <string name="comida">Comida</string>
     <string name="cena">Cena</string>
+    <string name="calorias_format">%1$d kcal</string>
+    <string name="gramos_format">%1$d g</string>
     <string name="lunes">Lunes</string>
     <string name="martes">Martes</string>
     <string name="miercoles">Miércoles</string>

@@ -67,6 +67,10 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(preferenceListener);
     }
 
+                if (resID != 0) {
+                    configurarClick(resID, textoParaEnviar, tipo, i);
+                }
+            }
     private void loadDays() {
         List<DaySummary> summaries = dayRepository.getAllSummaries();
         List<DayItem> dayItems = new ArrayList<>();
@@ -87,6 +91,19 @@ public class MainActivity extends AppCompatActivity {
         return new DaySummary(dayIndex, summary.getDayName(), calories, protein, carbs, fat);
     }
 
+    private void configurarClick(int cardId, String nombreComida, String tipoComida, int diaId) {
+        CardView card = findViewById(cardId);
+        if (card != null) {
+            card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Creamos el Intent para ir a la actividad de detalle
+                    Intent intent = new Intent(MainActivity.this, ComidasDiaActivity.class);
+
+                    // Pasamos datos extra (opcional, para saber qué comida se pulsó)
+                    intent.putExtra("NOMBRE_COMIDA", nombreComida);
+                    intent.putExtra(ComidasDiaActivity.EXTRA_DIA_ID, diaId);
+                    intent.putExtra(ComidasDiaActivity.EXTRA_TIPO_COMIDA, tipoComida);
     private int getTempValue(String keyPrefix, int dayIndex, int fallback) {
         String key = keyPrefix + dayIndex;
         return sharedPreferences.contains(key) ? sharedPreferences.getInt(key, fallback) : fallback;
@@ -106,3 +123,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 }
+
