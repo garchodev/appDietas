@@ -3,9 +3,11 @@ package com.example.appdietas;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -67,10 +69,6 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(preferenceListener);
     }
 
-                if (resID != 0) {
-                    configurarClick(resID, textoParaEnviar, tipo, i);
-                }
-            }
     private void loadDays() {
         List<DaySummary> summaries = dayRepository.getAllSummaries();
         List<DayItem> dayItems = new ArrayList<>();
@@ -104,6 +102,12 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtra("NOMBRE_COMIDA", nombreComida);
                     intent.putExtra(ComidasDiaActivity.EXTRA_DIA_ID, diaId);
                     intent.putExtra(ComidasDiaActivity.EXTRA_TIPO_COMIDA, tipoComida);
+                    startActivity(intent);
+                }
+            });
+        }
+    }
+
     private int getTempValue(String keyPrefix, int dayIndex, int fallback) {
         String key = keyPrefix + dayIndex;
         return sharedPreferences.contains(key) ? sharedPreferences.getInt(key, fallback) : fallback;
@@ -123,4 +127,3 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 }
-
