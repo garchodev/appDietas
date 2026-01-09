@@ -18,15 +18,33 @@ public class ComidasDiaActivity extends AppCompatActivity {
     public static final String EXTRA_DIA_ID = "EXTRA_DIA_ID";
     public static final String EXTRA_TIPO_COMIDA = "EXTRA_TIPO_COMIDA";
 
+    private int diaId;
+    private LinearLayout mealsContainer;
+    private ComidasDbHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comidas_dia);
 
-        int diaId = getIntent().getIntExtra(EXTRA_DIA_ID, 1);
+        diaId = getIntent().getIntExtra(EXTRA_DIA_ID, 1);
 
-        LinearLayout mealsContainer = findViewById(R.id.meals_container);
-        ComidasDbHelper dbHelper = new ComidasDbHelper(this);
+        mealsContainer = findViewById(R.id.meals_container);
+        dbHelper = new ComidasDbHelper(this);
+        loadMeals();
+
+        ImageView btnBack = findViewById(R.id.btnVolver);
+        btnBack.setOnClickListener(v -> finish());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadMeals();
+    }
+
+    private void loadMeals() {
+        mealsContainer.removeAllViews();
         List<Comida> comidasDia = dbHelper.getComidasForDia(diaId);
 
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -58,19 +76,12 @@ public class ComidasDiaActivity extends AppCompatActivity {
 
             cambiarComida.setOnClickListener(view -> {
                 Intent intent = new Intent(ComidasDiaActivity.this, CambiarComidaActivity.class);
-                intent.putExtra(EXTRA_DIA_ID, diaId);
-                intent.putExtra(EXTRA_TIPO_COMIDA, comida.getTipo());
+                intent.putExtra(CambiarComidaActivity.EXTRA_DIA_ID, diaId);
+                intent.putExtra(CambiarComidaActivity.EXTRA_TIPO, comida.getTipo());
                 startActivity(intent);
             });
 
             mealsContainer.addView(mealView);
         }
-        String nombreComida = getIntent().getStringExtra("NOMBRE_COMIDA");
-        String[] partes = nombreComida == null ? new String[0] : nombreComida.split(" ", 2);
-        String tipo = partes.length > 0 ? partes[0] : null;
-        String dia = partes.length > 1 ? partes[1] : null;
-
-        ImageView btnBack = findViewById(R.id.btnVolver);
-        btnBack.setOnClickListener(v -> finish());
     }
 }

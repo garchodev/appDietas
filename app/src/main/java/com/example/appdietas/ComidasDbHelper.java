@@ -88,6 +88,97 @@ public class ComidasDbHelper extends SQLiteOpenHelper {
         return comidas;
     }
 
+    public Comida getMealForDayTipo(int diaId, String tipo) {
+        SQLiteDatabase db = getReadableDatabase();
+        String selection = COLUMN_DIA_ID + " = ? AND " + COLUMN_TIPO + " = ?";
+        String[] selectionArgs = {String.valueOf(diaId), tipo};
+
+        try (Cursor cursor = db.query(
+                TABLE_COMIDAS,
+                null,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                COLUMN_ID + " ASC",
+                "1"
+        )) {
+            if (cursor.moveToFirst()) {
+                return new Comida(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_DIA_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TIPO)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOMBRE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPCION)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CALORIAS)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CARBS)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PROTEINAS)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_LIPIDOS)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IMAGEN))
+                );
+            }
+        }
+        return null;
+    }
+
+    public Comida getRandomMealByTipo(String tipo) {
+        SQLiteDatabase db = getReadableDatabase();
+        String selection = COLUMN_TIPO + " = ?";
+        String[] selectionArgs = {tipo};
+
+        try (Cursor cursor = db.query(
+                TABLE_COMIDAS,
+                null,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                "RANDOM()",
+                "1"
+        )) {
+            if (cursor.moveToFirst()) {
+                return new Comida(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_DIA_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TIPO)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOMBRE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPCION)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CALORIAS)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CARBS)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PROTEINAS)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_LIPIDOS)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IMAGEN))
+                );
+            }
+        }
+        return null;
+    }
+
+    public boolean updateMealForDayTipo(int diaId, String tipo, Comida meal) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NOMBRE, meal.getNombre());
+        values.put(COLUMN_DESCRIPCION, meal.getDescripcion());
+        values.put(COLUMN_CALORIAS, meal.getCalorias());
+        values.put(COLUMN_CARBS, meal.getCarbohidratos());
+        values.put(COLUMN_PROTEINAS, meal.getProteinas());
+        values.put(COLUMN_LIPIDOS, meal.getLipidos());
+        values.put(COLUMN_IMAGEN, meal.getImagenResId());
+
+        int updated = db.update(
+                TABLE_COMIDAS,
+                values,
+                COLUMN_DIA_ID + " = ? AND " + COLUMN_TIPO + " = ?",
+                new String[]{String.valueOf(diaId), tipo}
+        );
+
+        if (updated > 0) {
+            return true;
+        }
+
+        values.put(COLUMN_DIA_ID, diaId);
+        values.put(COLUMN_TIPO, tipo);
+        return db.insert(TABLE_COMIDAS, null, values) != -1;
+    }
+
     private void seedData(SQLiteDatabase db) {
         String[] tipos = {"Desayuno", "Comida", "Cena"};
         int[] imagenes = {R.drawable.desayuno1, R.drawable.imagencomida, R.drawable.imagencomida};
