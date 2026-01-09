@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         List<DayItem> dayItems = new ArrayList<>();
         for (DaySummary summary : summaries) {
             DaySummary resolvedSummary = applyTemporaryOverrides(summary);
-            dayItems.add(new DayItem(resolvedSummary, buildMealsForDay(resolvedSummary.getDayName())));
+            dayItems.add(new DayItem(resolvedSummary, buildMealsForDay(resolvedSummary)));
         }
 
         dayRecyclerView.setAdapter(new DayAdapter(dayItems, this::openMealDetail));
@@ -113,17 +113,19 @@ public class MainActivity extends AppCompatActivity {
         return sharedPreferences.contains(key) ? sharedPreferences.getInt(key, fallback) : fallback;
     }
 
-    private List<MealItem> buildMealsForDay(String dayName) {
+    private List<MealItem> buildMealsForDay(DaySummary summary) {
         List<MealItem> meals = new ArrayList<>();
-        meals.add(new MealItem(dayName, "Desayuno", R.drawable.desayuno1));
-        meals.add(new MealItem(dayName, "Comida", R.drawable.desayuno1));
-        meals.add(new MealItem(dayName, "Cena", R.drawable.desayuno1));
+        meals.add(new MealItem(summary.getDayIndex(), summary.getDayName(), "Desayuno", R.drawable.desayuno1));
+        meals.add(new MealItem(summary.getDayIndex(), summary.getDayName(), "Comida", R.drawable.desayuno1));
+        meals.add(new MealItem(summary.getDayIndex(), summary.getDayName(), "Cena", R.drawable.desayuno1));
         return meals;
     }
 
     private void openMealDetail(MealItem mealItem) {
         Intent intent = new Intent(MainActivity.this, ComidasDiaActivity.class);
         intent.putExtra("NOMBRE_COMIDA", mealItem.getLabel() + " " + mealItem.getDayName());
+        intent.putExtra(ComidasDiaActivity.EXTRA_DIA_ID, mealItem.getDayIndex());
+        intent.putExtra(ComidasDiaActivity.EXTRA_TIPO_COMIDA, mealItem.getLabel());
         startActivity(intent);
     }
 }
