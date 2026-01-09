@@ -1,6 +1,5 @@
 package com.example.appdietas;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,15 +16,13 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class CambiarComidaActivity extends AppCompatActivity {
 
-    public static final String EXTRA_DIA = "EXTRA_DIA";
+    public static final String EXTRA_DIA_ID = "EXTRA_DIA_ID";
     public static final String EXTRA_TIPO = "EXTRA_TIPO";
 
-    private static final String PREFS_NAME = "mealPrefs";
-    private static final String TEMP_KEY_PREFIX = "temp_meal_";
-
-    private DatabaseHelper databaseHelper;
-    private String dia;
+    private ComidasDbHelper comidasDbHelper;
+    private int diaId;
     private String tipo;
+    private Comida selectedMeal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +35,13 @@ public class CambiarComidaActivity extends AppCompatActivity {
             return insets;
         });
 
-        databaseHelper = new DatabaseHelper(this);
+        comidasDbHelper = new ComidasDbHelper(this);
 
-        dia = getIntent().getStringExtra(EXTRA_DIA);
+        diaId = getIntent().getIntExtra(EXTRA_DIA_ID, -1);
         tipo = getIntent().getStringExtra(EXTRA_TIPO);
 
         TextView textViewContexto = findViewById(R.id.textViewContexto);
-        String contexto = buildContexto(dia, tipo);
+        String contexto = buildContexto(diaId, tipo);
         textViewContexto.setText(contexto);
 
         ImageView btnVolver = findViewById(R.id.btnVolver);
@@ -52,7 +49,6 @@ public class CambiarComidaActivity extends AppCompatActivity {
 
         TextInputEditText editTextNombreComida = findViewById(R.id.editTextNombreComida);
         TextInputEditText editTextDescripcion = findViewById(R.id.editTextDescripcion);
-        TextInputEditText editTextGramajes = findViewById(R.id.editTextGramajes);
         TextInputEditText editTextCalorias = findViewById(R.id.editTextCalorias);
         TextInputEditText editTextGrasas = findViewById(R.id.editTextGrasas);
         TextInputEditText editTextProteinas = findViewById(R.id.editTextProteinas);
@@ -68,7 +64,6 @@ public class CambiarComidaActivity extends AppCompatActivity {
         btnRegistrarComida.setOnClickListener(view -> {
             String nombre = getTextValue(editTextNombreComida);
             String descripcion = getTextValue(editTextDescripcion);
-            double gramajes = getNumericValue(editTextGramajes);
             double calorias = getNumericValue(editTextCalorias);
             double grasas = getNumericValue(editTextGrasas);
             double proteinas = getNumericValue(editTextProteinas);
@@ -79,29 +74,23 @@ public class CambiarComidaActivity extends AppCompatActivity {
                 return;
             }
 
-            if (tipo == null || tipo.isEmpty()) {
-                Toast.makeText(this, "No se pudo identificar el tipo de comida", Toast.LENGTH_SHORT).show();
+            if (tipo == null || tipo.isEmpty() || diaId == -1) {
+                Toast.makeText(this, "No se pudo identificar la comida", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            long comidaId = databaseHelper.insertMeal(
+            selectedMeal = new Comida(
+                    diaId,
+                    tipo,
                     nombre,
                     descripcion,
-                    gramajes,
-                    grasas,
-                    proteinas,
-                    carbohidratos,
-                    calorias,
-                    tipo
+                    (int) Math.round(calorias),
+                    (int) Math.round(carbohidratos),
+                    (int) Math.round(proteinas),
+                    (int) Math.round(grasas),
+                    R.drawable.imagencomida
             );
-
-            if (comidaId == -1) {
-                Toast.makeText(this, "No se pudo registrar la comida", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            guardarSeleccionTemporal((int) comidaId);
-            Toast.makeText(this, "Comida registrada y seleccionada", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Comida registrada y lista para guardar", Toast.LENGTH_SHORT).show();
         });
 
         btnGuardarCambios.setOnClickListener(view -> guardarCambios());
@@ -109,69 +98,70 @@ public class CambiarComidaActivity extends AppCompatActivity {
     }
 
     private void solicitarNuevaComida() {
-        if (tipo == null || tipo.isEmpty()) {
-            Toast.makeText(this, "No se pudo identificar el tipo de comida", Toast.LENGTH_SHORT).show();
+        if (tipo == null || tipo.isEmpty() || diaId == -1) {
+            Toast.makeText(this, "No se pudo identificar la comida", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        int comidaId = databaseHelper.getRandomMealIdByTipo(tipo);
-        if (comidaId == -1) {
+        Comida randomMeal = comidasDbHelper.getRandomMealByTipo(tipo);
+        if (randomMeal == null) {
             Toast.makeText(this, "No hay comidas disponibles para este tipo", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        guardarSeleccionTemporal(comidaId);
+        selectedMeal = new Comida(
+                diaId,
+                tipo,
+                randomMeal.getNombre(),
+                randomMeal.getDescripcion(),
+                randomMeal.getCalorias(),
+                randomMeal.getCarbohidratos(),
+                randomMeal.getProteinas(),
+                randomMeal.getLipidos(),
+                randomMeal.getImagenResId()
+        );
         Toast.makeText(this, "Se ha seleccionado una nueva comida", Toast.LENGTH_SHORT).show();
     }
 
-    private void guardarSeleccionTemporal(int comidaId) {
-        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-        editor.putInt(getTempKey(), comidaId);
-        editor.apply();
-    }
-
     private void guardarCambios() {
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        if (!prefs.contains(getTempKey())) {
+        if (selectedMeal == null) {
             Toast.makeText(this, "No hay cambios para guardar", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        int comidaId = prefs.getInt(getTempKey(), -1);
-        if (comidaId == -1 || dia == null || dia.isEmpty() || tipo == null || tipo.isEmpty()) {
+        if (tipo == null || tipo.isEmpty() || diaId == -1) {
             Toast.makeText(this, "No se pudo guardar la selección", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        databaseHelper.upsertComidaDia(dia, tipo, comidaId);
-        prefs.edit().remove(getTempKey()).apply();
-        Toast.makeText(this, "Cambios guardados", Toast.LENGTH_SHORT).show();
+        boolean updated = comidasDbHelper.updateMealForDayTipo(diaId, tipo, selectedMeal);
+        if (updated) {
+            Toast.makeText(this, "Cambios guardados", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "No se pudo guardar la selección", Toast.LENGTH_SHORT).show();
+        }
         finish();
     }
 
     private void cancelarCambios() {
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        prefs.edit().remove(getTempKey()).apply();
+        selectedMeal = null;
         Toast.makeText(this, "Cambios cancelados", Toast.LENGTH_SHORT).show();
         finish();
     }
 
-    private String buildContexto(String dia, String tipo) {
-        if (dia == null && tipo == null) {
+    private String buildContexto(int diaId, String tipo) {
+        if (diaId == -1 && tipo == null) {
             return "Comida del día";
         }
-        if (dia == null) {
+        if (diaId == -1) {
             return tipo;
         }
+        String diaTexto = "Día " + diaId;
         if (tipo == null) {
-            return dia;
+            return diaTexto;
         }
-        return tipo + " · " + dia;
-    }
-
-    private String getTempKey() {
-        return TEMP_KEY_PREFIX + (dia == null ? "" : dia) + "_" + (tipo == null ? "" : tipo);
+        return tipo + " · " + diaTexto;
     }
 
     private String getTextValue(TextInputEditText editText) {
