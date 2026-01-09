@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
                 String textoParaEnviar = tipo + " " + diasSemana[i-1];
 
                 if (resID != 0) {
-                    configurarClick(resID, textoParaEnviar);
+                    configurarClick(resID, textoParaEnviar, tipo, i);
                 }
             }
         }
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private void configurarClick(int cardId, String nombreComida) {
+    private void configurarClick(int cardId, String nombreComida, String tipoComida, int diaId) {
         CardView card = findViewById(cardId);
         if (card != null) {
             card.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
                     // Pasamos datos extra (opcional, para saber qué comida se pulsó)
                     intent.putExtra("NOMBRE_COMIDA", nombreComida);
+                    intent.putExtra(ComidasDiaActivity.EXTRA_DIA_ID, diaId);
+                    intent.putExtra(ComidasDiaActivity.EXTRA_TIPO_COMIDA, tipoComida);
 
                     startActivity(intent);
                 }
@@ -65,5 +67,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-
 
