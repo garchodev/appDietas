@@ -61,7 +61,7 @@ public class LandingActivity extends AppCompatActivity {
                 R.layout.landing_slide3
         );
 
-        adapter = new LandingAdapter(layouts);
+        adapter = new LandingAdapter(layouts, this::handleStartAction);
         viewPager.setAdapter(adapter);
 
         addDots(layouts.size());
@@ -72,23 +72,17 @@ public class LandingActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 setCurrentDot(position);
-
-                if (position == layouts.size() - 1) {
-                    // Buscar el botón dentro del último slide
-                    Button buttonStart = viewPager.findViewById(R.id.buttonContinuar);
-                    if (buttonStart != null) {
-                        buttonStart.setOnClickListener(v -> {
-                            SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-                            editor.putBoolean(PREF_KEY_FIRST_RUN, false);
-                            editor.apply();
-                            Intent intent = new Intent(LandingActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                            finish();
-                        });
-                    }
-                }
             }
         });
+    }
+
+    private void handleStartAction() {
+        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+        editor.putBoolean(PREF_KEY_FIRST_RUN, false);
+        editor.apply();
+        Intent intent = new Intent(LandingActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void addDots(int count) {
