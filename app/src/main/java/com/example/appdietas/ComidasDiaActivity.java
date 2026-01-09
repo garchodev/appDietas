@@ -65,29 +65,10 @@ public class ComidasDiaActivity extends AppCompatActivity {
 
             mealsContainer.addView(mealView);
         }
-        // Referencias de ingredientes
-        headerIngredientes = findViewById(R.id.header_ingredientes);
-        contentIngredientes = findViewById(R.id.content_ingredientes);
-        arrowIngredientes = findViewById(R.id.arrow_ingredientes);
-
-        // Referencias de instrucciones
-        headerInstrucciones = findViewById(R.id.header_instrucciones);
-        contentInstrucciones = findViewById(R.id.content_instrucciones);
-        arrowInstrucciones = findViewById(R.id.arrow_instrucciones); // AGREGA este ImageView al layout XML
-
         String nombreComida = getIntent().getStringExtra("NOMBRE_COMIDA");
         String[] partes = nombreComida == null ? new String[0] : nombreComida.split(" ", 2);
         String tipo = partes.length > 0 ? partes[0] : null;
         String dia = partes.length > 1 ? partes[1] : null;
-
-        Button botonCambiar = findViewById(R.id.button);
-
-        botonCambiar.setOnClickListener(view -> {
-            Intent intent = new Intent(ComidasDiaActivity.this, CambiarComidaActivity.class);
-            intent.putExtra(CambiarComidaActivity.EXTRA_DIA, dia);
-            intent.putExtra(CambiarComidaActivity.EXTRA_TIPO, tipo);
-            startActivity(intent);
-        });
 
         ImageView btnBack = findViewById(R.id.btnVolver);
         btnBack.setOnClickListener(v -> finish());
