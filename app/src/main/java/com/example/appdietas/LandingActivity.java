@@ -3,20 +3,14 @@ package com.example.appdietas;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.appdietas.login.LoginActivity;
 import com.example.appdietas.data.AppDatabaseHelper;
 import com.example.appdietas.data.AppDatabaseHelper.Meal;
 import com.example.appdietas.data.AppDatabaseHelper.WeeklyPlanEntry;
 
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -28,11 +22,6 @@ public class LandingActivity extends AppCompatActivity {
     private static final String PREF_KEY_PLAN_INITIALIZED = "weeklyPlanInitialized";
     private static final String[] TIPOS_COMIDA = {"Desayuno", "Comida", "Cena"};
 
-    private ViewPager2 viewPager;
-    private LinearLayout layoutDots;
-    private ImageView[] dots;
-    private LandingAdapter adapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,72 +29,14 @@ public class LandingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_landing);
 
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        boolean isFirstRun = prefs.getBoolean(PREF_KEY_FIRST_RUN, true);
-
         ensureWeeklyPlanInitialized(prefs);
 
-        if (!isFirstRun) {
-            // !isFirstRun para la version FINAL IMPORTANTEEEEEE
-            // Ya ha abierto la app antes → ir directamente al MainActivity
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-            return;
-        }
-
-        viewPager = findViewById(R.id.landingViewPager);
-        layoutDots = findViewById(R.id.layoutDots);
-
-        List<Integer> layouts = Arrays.asList(
-                R.layout.landing_slide1,
-                R.layout.landing_slide2,
-                R.layout.landing_slide3
-        );
-
-        adapter = new LandingAdapter(layouts, this::handleStartAction);
-        viewPager.setAdapter(adapter);
-
-        addDots(layouts.size());
-        setCurrentDot(0);
-
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                setCurrentDot(position);
-            }
-        });
-    }
-
-    private void handleStartAction() {
-        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = prefs.edit();
         editor.putBoolean(PREF_KEY_FIRST_RUN, false);
         editor.apply();
-        Intent intent = new Intent(LandingActivity.this, LoginActivity.class);
-        startActivity(intent);
+
+        startActivity(new Intent(this, MainActivity.class));
         finish();
-    }
-
-    private void addDots(int count) {
-        dots = new ImageView[count];
-        layoutDots.removeAllViews();
-
-        for (int i = 0; i < count; i++) {
-            dots[i] = new ImageView(this);
-            dots[i].setImageResource(R.drawable.dot_inactive);
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            params.setMargins(8, 0, 8, 0);
-            layoutDots.addView(dots[i], params);
-        }
-    }
-
-    private void setCurrentDot(int index) {
-        for (int i = 0; i < dots.length; i++) {
-            dots[i].setImageResource(i == index ? R.drawable.dot_active : R.drawable.dot_inactive);
-        }
     }
 
     private void ensureWeeklyPlanInitialized(SharedPreferences prefs) {
