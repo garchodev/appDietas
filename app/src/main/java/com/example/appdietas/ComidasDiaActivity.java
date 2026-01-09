@@ -31,7 +31,7 @@ public class ComidasDiaActivity extends AppCompatActivity {
 
         LayoutInflater inflater = LayoutInflater.from(this);
         for (Comida comida : comidasDia) {
-            LinearLayout mealView = (LinearLayout) inflater.inflate(
+            View mealView = inflater.inflate(
                     R.layout.item_comida,
                     mealsContainer,
                     false
