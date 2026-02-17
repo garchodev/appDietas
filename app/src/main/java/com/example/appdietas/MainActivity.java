@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String KEY_TEMP_FAT = "temp_fat_day_";
 
     private DayRepository dayRepository;
+    private ComidasDbHelper comidasDbHelper;
     private RecyclerView dayRecyclerView;
     private SharedPreferences sharedPreferences;
 
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         dayRepository = new DayRepository(this);
+        comidasDbHelper = new ComidasDbHelper(this);
         sharedPreferences = getSharedPreferences(PREFS_TEMP, MODE_PRIVATE);
 
         dayRecyclerView = findViewById(R.id.dayRecyclerView);
@@ -115,9 +117,20 @@ public class MainActivity extends AppCompatActivity {
 
     private List<MealItem> buildMealsForDay(DaySummary summary) {
         List<MealItem> meals = new ArrayList<>();
-        meals.add(new MealItem(summary.getDayIndex(), summary.getDayName(), "Desayuno", R.drawable.desayuno1));
-        meals.add(new MealItem(summary.getDayIndex(), summary.getDayName(), "Comida", R.drawable.desayuno1));
-        meals.add(new MealItem(summary.getDayIndex(), summary.getDayName(), "Cena", R.drawable.desayuno1));
+
+        // ¡ESTE ES EL CAMBIO CLAVE!
+        // Usamos comidasDbHelper en lugar de dayRepository
+        List<Comida> comidasReales = comidasDbHelper.getComidasForDia(summary.getDayIndex());
+
+        for (Comida c : comidasReales) {
+            meals.add(new MealItem(
+                    summary.getDayIndex(),
+                    summary.getDayName(),
+                    c.getTipo(),
+                    c.getImagenResId(),
+                    c                    // El objeto Comida ahora trae las calorías de comidas.db
+            ));
+        }
         return meals;
     }
 

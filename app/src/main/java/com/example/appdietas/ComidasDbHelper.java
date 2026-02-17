@@ -8,11 +8,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ComidasDbHelper extends SQLiteOpenHelper {
 
+
     private static final String DATABASE_NAME = "comidas.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 4;
 
     private static final String TABLE_COMIDAS = "comidas";
     private static final String COLUMN_ID = "_id";
@@ -181,21 +183,27 @@ public class ComidasDbHelper extends SQLiteOpenHelper {
 
     private void seedData(SQLiteDatabase db) {
         String[] tipos = {"Desayuno", "Comida", "Cena"};
-        int[] imagenes = {R.drawable.desayuno1, R.drawable.imagencomida, R.drawable.imagencomida};
+        int[] imagenes = {R.drawable.desayuno1, R.drawable.comida1, R.drawable.cena1};
+        Random random = new Random();
 
         db.beginTransaction();
         try {
             for (int dia = 1; dia <= 7; dia++) {
                 for (int i = 0; i < tipos.length; i++) {
+
+                    int carbs = random.nextInt(41) + 30;    // Entre 30 y 70g
+                    int protein = random.nextInt(31) + 15;  // Entre 15 y 45g
+                    int fats = random.nextInt(16) + 5;
+                    int cal = (carbs * 4) + (protein * 4) + (fats * 9);
                     ContentValues values = new ContentValues();
                     values.put(COLUMN_DIA_ID, dia);
                     values.put(COLUMN_TIPO, tipos[i]);
                     values.put(COLUMN_NOMBRE, tipos[i] + " saludable Día " + dia);
                     values.put(COLUMN_DESCRIPCION, "Receta balanceada con ingredientes frescos.");
-                    values.put(COLUMN_CALORIAS, 320 + (dia * 5) + (i * 30));
-                    values.put(COLUMN_CARBS, 40 + (i * 5));
-                    values.put(COLUMN_PROTEINAS, 20 + (i * 4));
-                    values.put(COLUMN_LIPIDOS, 12 + (i * 3));
+                    values.put(COLUMN_CALORIAS, cal);
+                    values.put(COLUMN_CARBS, carbs);
+                    values.put(COLUMN_PROTEINAS, protein);
+                    values.put(COLUMN_LIPIDOS, fats);
                     values.put(COLUMN_IMAGEN, imagenes[i]);
                     db.insert(TABLE_COMIDAS, null, values);
                 }

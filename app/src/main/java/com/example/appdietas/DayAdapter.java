@@ -31,9 +31,36 @@ public class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull DayViewHolder holder, int position) {
         DayItem item = dayItems.get(position);
-        DaySummary summary = item.getSummary();
-        holder.dayTitle.setText(summary.getDayName());
-        holder.daySummary.setText(formatSummary(summary));
+
+        // 1. Obtener el nombre del día
+        if (item.getSummary() != null) {
+            holder.dayTitle.setText(item.getSummary().getDayName());
+        }
+
+        // 2. Calcular totales dinámicamente a partir de la clase Comida
+        int totalCalories = 0;
+        int totalProtein = 0;
+        int totalCarbs = 0;
+        int totalFat = 0;
+
+        if (item.getMeals() != null) {
+            for (MealItem mealItem : item.getMeals()) {
+                Comida c = mealItem.getComida(); // Ya no dará error
+                if (c != null) {
+                    totalCalories += c.getCalorias();
+                    totalProtein += c.getProteinas();
+                    totalCarbs += c.getCarbohidratos();
+                    totalFat += c.getLipidos();
+                }
+            }
+        }
+
+        // Usamos Locale para evitar problemas de formato y %d porque son enteros
+        String summaryText = String.format(java.util.Locale.getDefault(),
+                "Calorías: %d kcal · Prot: %dg · Carbs: %dg · Grasas: %dg",
+                totalCalories, totalProtein, totalCarbs, totalFat);
+
+        holder.daySummary.setText(summaryText);
 
         if (holder.mealRecyclerView.getLayoutManager() == null) {
             holder.mealRecyclerView.setLayoutManager(
