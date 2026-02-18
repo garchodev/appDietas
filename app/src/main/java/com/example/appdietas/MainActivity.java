@@ -1,13 +1,18 @@
 package com.example.appdietas;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -16,6 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,6 +65,17 @@ public class MainActivity extends AppCompatActivity {
         dayRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         dayRecyclerView.setHasFixedSize(true);
 
+        solicitarPermisosNotificacion();
+        configurarAlarmasDiarias();
+        // programarAlarmaPrueba();
+        loadDays();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Cada vez que volvamos a esta pantalla (por ejemplo, después de cambiar una comida),
+        // volvemos a leer la base de datos y refrescamos la suma de macronutrientes.
         loadDays();
     }
 
@@ -140,5 +160,68 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(ComidasDiaActivity.EXTRA_DIA_ID, mealItem.getDayIndex());
         intent.putExtra(ComidasDiaActivity.EXTRA_TIPO_COMIDA, mealItem.getLabel());
         startActivity(intent);
+    }
+
+    private void solicitarPermisosNotificacion() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
+    }
+
+    private void configurarAlarmasDiarias() {
+        // Horarios obligatorios de tu enunciado
+        programarAlarma("Desayuno", 6, 0);
+        programarAlarma("Comida", 12, 0);
+        programarAlarma("Cena", 18, 0);
+    }
+
+    private void programarAlarma(String tipoComida, int hora, int minuto) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        intent.putExtra("TIPO_COMIDA", tipoComida);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this, tipoComida.hashCode(), intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, hora);
+        calendar.set(Calendar.MINUTE, minuto);
+        calendar.set(Calendar.SECOND, 0);
+
+        // Si la hora ya ha pasado hoy, programarla para mañana a la misma hora
+        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
+
+        if (alarmManager != null) {
+            // Repetir cada 24 horas exactas
+            alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY,
+                    pendingIntent
+            );
+        }
+    }
+
+    @SuppressLint("ScheduleExactAlarm")
+    private void programarAlarmaPrueba() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        intent.putExtra("TIPO_COMIDA", "Prueba Inmediata");
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this, 999, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Programar para dentro de 10 segundos (10000 milisegundos)
+        long triggerTime = System.currentTimeMillis() + 10000;
+
+        if (alarmManager != null) {
+            // setExact obliga al móvil a no retrasar la alarma
+            alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
+        }
     }
 }

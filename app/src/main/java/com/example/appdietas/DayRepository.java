@@ -28,6 +28,7 @@ public class DayRepository extends SQLiteOpenHelper {
     private static final String COLUMN_COMIDA_DIA_ID = "dia_id";
     private static final String COLUMN_COMIDA_TIPO = "tipo";
     private static final String COLUMN_COMIDA_NOMBRE = "nombre";
+    private static final String COLUMN_COMIDA_GRAM = "gramaje";
     private static final String COLUMN_COMIDA_CAL = "calorias";
     private static final String COLUMN_COMIDA_PROT = "proteinas";
     private static final String COLUMN_COMIDA_CARB = "carbohidratos";
@@ -57,6 +58,7 @@ public class DayRepository extends SQLiteOpenHelper {
                 + COLUMN_COMIDA_DIA_ID + " INTEGER, "
                 + COLUMN_COMIDA_TIPO + " TEXT, "
                 + COLUMN_COMIDA_NOMBRE + " TEXT, "
+                + COLUMN_COMIDA_GRAM + " INTEGER, "
                 + COLUMN_COMIDA_CAL + " INTEGER, "
                 + COLUMN_COMIDA_PROT + " INTEGER, "
                 + COLUMN_COMIDA_CARB + " INTEGER, "
@@ -75,7 +77,7 @@ public class DayRepository extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // EL MÉTODO QUE LE FALTABA A TU MAINACTIVITY
+    // EL METODO QUE LE FALTABA A TU MAINACTIVITY ANDRES
     public List<Comida> getComidasForDay(int dayIndex) {
         List<Comida> list = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
@@ -90,11 +92,13 @@ public class DayRepository extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COMIDA_TIPO)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_COMIDA_NOMBRE)),
                         "", // descripción
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COMIDA_GRAM)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COMIDA_CAL)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COMIDA_CARB)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COMIDA_PROT)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COMIDA_LIP)),
-                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COMIDA_IMG))
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_COMIDA_IMG)),
+                        "" // imagenUri
                 ));
             } while (cursor.moveToNext());
             cursor.close();

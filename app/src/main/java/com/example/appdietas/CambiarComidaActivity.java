@@ -12,6 +12,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.appdietas.ia.GeminiService;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class CambiarComidaActivity extends AppCompatActivity {
@@ -53,6 +54,8 @@ public class CambiarComidaActivity extends AppCompatActivity {
         TextInputEditText editTextGrasas = findViewById(R.id.editTextGrasas);
         TextInputEditText editTextProteinas = findViewById(R.id.editTextProteinas);
         TextInputEditText editTextCarbohidratos = findViewById(R.id.editTextCarbohidratos);
+        TextInputEditText editTextGramajes = findViewById(R.id.editTextGramajes);
+
 
         Button btnSolicitarNuevaComida = findViewById(R.id.btnSolicitarNuevaComida);
         Button btnRegistrarComida = findViewById(R.id.btnRegistrarComida);
@@ -64,10 +67,12 @@ public class CambiarComidaActivity extends AppCompatActivity {
         btnRegistrarComida.setOnClickListener(view -> {
             String nombre = getTextValue(editTextNombreComida);
             String descripcion = getTextValue(editTextDescripcion);
+            double gramaje = getNumericValue(editTextGramajes);
             double calorias = getNumericValue(editTextCalorias);
             double grasas = getNumericValue(editTextGrasas);
             double proteinas = getNumericValue(editTextProteinas);
             double carbohidratos = getNumericValue(editTextCarbohidratos);
+            String urlExistente = (selectedMeal != null) ? selectedMeal.getImagenUri() : "";
 
             if (nombre.isEmpty()) {
                 Toast.makeText(this, "Ingresa el nombre de la comida", Toast.LENGTH_SHORT).show();
@@ -84,11 +89,13 @@ public class CambiarComidaActivity extends AppCompatActivity {
                     tipo,
                     nombre,
                     descripcion,
+                    (int) Math.round(gramaje),
                     (int) Math.round(calorias),
                     (int) Math.round(carbohidratos),
                     (int) Math.round(proteinas),
                     (int) Math.round(grasas),
-                    R.drawable.imagencomida
+                    R.drawable.imagencomida,
+                    urlExistente
             );
             Toast.makeText(this, "Comida registrada y lista para guardar", Toast.LENGTH_SHORT).show();
         });
@@ -103,26 +110,54 @@ public class CambiarComidaActivity extends AppCompatActivity {
             return;
         }
 
-        Comida randomMeal = comidasDbHelper.getRandomMealByTipo(tipo);
-        if (randomMeal == null) {
-            Toast.makeText(this, "No hay comidas disponibles para este tipo", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        Toast.makeText(this, "Consultando a la IA...", Toast.LENGTH_SHORT).show();
 
-        selectedMeal = new Comida(
-                diaId,
-                tipo,
-                randomMeal.getNombre(),
-                randomMeal.getDescripcion(),
-                randomMeal.getCalorias(),
-                randomMeal.getCarbohidratos(),
-                randomMeal.getProteinas(),
-                randomMeal.getLipidos(),
-                randomMeal.getImagenResId()
-        );
-        Toast.makeText(this, "Se ha seleccionado una nueva comida", Toast.LENGTH_SHORT).show();
+        // 1. Instanciamos nuestro servicio
+        GeminiService geminiService = new GeminiService();
+
+        // 2. Construimos el contexto
+        String contexto = "Día " + diaId;
+
+        // 3. Llamada a la IA
+        geminiService.generarNuevaComida(tipo, contexto, new GeminiService.GeminiCallback() {
+
+            @Override
+            public void onSuccess(Comida nuevaComidaIA) {
+                // Buscamos todas las vistas de la interfaz
+                TextInputEditText editTextNombreComida = findViewById(R.id.editTextNombreComida);
+                TextInputEditText editTextDescripcion = findViewById(R.id.editTextDescripcion);
+                TextInputEditText editTextCalorias = findViewById(R.id.editTextCalorias);
+                TextInputEditText editTextGrasas = findViewById(R.id.editTextGrasas);
+                TextInputEditText editTextProteinas = findViewById(R.id.editTextProteinas);
+                TextInputEditText editTextCarbohidratos = findViewById(R.id.editTextCarbohidratos);
+
+                // Añadimos la vista del gramaje (Asegúrate de que este ID coincida con tu XML)
+                TextInputEditText editTextGramajes = findViewById(R.id.editTextGramajes);
+
+                // Rellenamos los campos con la respuesta de la IA
+                editTextNombreComida.setText(nuevaComidaIA.getNombre());
+                editTextDescripcion.setText(nuevaComidaIA.getDescripcion());
+                editTextCalorias.setText(String.valueOf(nuevaComidaIA.getCalorias()));
+                editTextGrasas.setText(String.valueOf(nuevaComidaIA.getLipidos()));
+                editTextProteinas.setText(String.valueOf(nuevaComidaIA.getProteinas()));
+                editTextCarbohidratos.setText(String.valueOf(nuevaComidaIA.getCarbohidratos()));
+                editTextGramajes.setText(String.valueOf(nuevaComidaIA.getGramaje()));
+
+
+                // Guardamos la referencia para cuando el usuario pulse "Registrar"
+                selectedMeal = nuevaComidaIA;
+                // Si quieres comprobarlo, añade este log:
+                android.util.Log.d("IA_DEBUG", "URL recibida: " + nuevaComidaIA.getImagenUri());
+
+                Toast.makeText(CambiarComidaActivity.this, "¡Comida generada por IA!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(CambiarComidaActivity.this, error, Toast.LENGTH_LONG).show();
+            }
+        });
     }
-
     private void guardarCambios() {
         if (selectedMeal == null) {
             Toast.makeText(this, "No hay cambios para guardar", Toast.LENGTH_SHORT).show();

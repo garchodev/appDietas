@@ -65,7 +65,6 @@ public class ComidasDiaActivity extends AppCompatActivity {
             TextView lipidos = mealView.findViewById(R.id.meal_fats);
             Button cambiarComida = mealView.findViewById(R.id.button_cambiar_comida);
 
-            imagen.setImageResource(comida.getImagenResId());
             tipo.setText(comida.getTipo());
             nombre.setText(comida.getNombre());
             descripcion.setText(comida.getDescripcion());

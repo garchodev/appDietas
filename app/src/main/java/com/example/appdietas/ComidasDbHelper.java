@@ -14,7 +14,7 @@ public class ComidasDbHelper extends SQLiteOpenHelper {
 
 
     private static final String DATABASE_NAME = "comidas.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 6;
 
     private static final String TABLE_COMIDAS = "comidas";
     private static final String COLUMN_ID = "_id";
@@ -22,11 +22,13 @@ public class ComidasDbHelper extends SQLiteOpenHelper {
     private static final String COLUMN_TIPO = "tipo";
     private static final String COLUMN_NOMBRE = "nombre";
     private static final String COLUMN_DESCRIPCION = "descripcion";
+    private static final String COLUMN_GRAMAJE = "gramaje";
     private static final String COLUMN_CALORIAS = "calorias";
     private static final String COLUMN_CARBS = "carbohidratos";
     private static final String COLUMN_PROTEINAS = "proteinas";
     private static final String COLUMN_LIPIDOS = "lipidos";
     private static final String COLUMN_IMAGEN = "imagen_res";
+    public static final String COLUMN_IMAGEN_URI = "imagen_uri";
 
     public ComidasDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -41,11 +43,13 @@ public class ComidasDbHelper extends SQLiteOpenHelper {
                         + COLUMN_TIPO + " TEXT NOT NULL, "
                         + COLUMN_NOMBRE + " TEXT NOT NULL, "
                         + COLUMN_DESCRIPCION + " TEXT NOT NULL, "
+                        + COLUMN_GRAMAJE + " INTEGER NOT NULL, "
                         + COLUMN_CALORIAS + " INTEGER NOT NULL, "
                         + COLUMN_CARBS + " INTEGER NOT NULL, "
                         + COLUMN_PROTEINAS + " INTEGER NOT NULL, "
                         + COLUMN_LIPIDOS + " INTEGER NOT NULL, "
-                        + COLUMN_IMAGEN + " INTEGER NOT NULL"
+                        + COLUMN_IMAGEN + " INTEGER NOT NULL, "
+                        + COLUMN_IMAGEN_URI + " TEXT"
                         + ");"
         );
 
@@ -79,11 +83,13 @@ public class ComidasDbHelper extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TIPO)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOMBRE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPCION)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_GRAMAJE)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CALORIAS)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CARBS)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PROTEINAS)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_LIPIDOS)),
-                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IMAGEN))
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IMAGEN)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGEN_URI))
                 ));
             }
         }
@@ -111,11 +117,13 @@ public class ComidasDbHelper extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TIPO)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOMBRE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPCION)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_GRAMAJE)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CALORIAS)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CARBS)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PROTEINAS)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_LIPIDOS)),
-                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IMAGEN))
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IMAGEN)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGEN_URI))
                 );
             }
         }
@@ -143,11 +151,13 @@ public class ComidasDbHelper extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TIPO)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOMBRE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPCION)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_GRAMAJE)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CALORIAS)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CARBS)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_PROTEINAS)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_LIPIDOS)),
-                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IMAGEN))
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IMAGEN)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGEN_URI))
                 );
             }
         }
@@ -159,11 +169,13 @@ public class ComidasDbHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_NOMBRE, meal.getNombre());
         values.put(COLUMN_DESCRIPCION, meal.getDescripcion());
+        values.put(COLUMN_GRAMAJE, meal.getGramaje());
         values.put(COLUMN_CALORIAS, meal.getCalorias());
         values.put(COLUMN_CARBS, meal.getCarbohidratos());
         values.put(COLUMN_PROTEINAS, meal.getProteinas());
         values.put(COLUMN_LIPIDOS, meal.getLipidos());
         values.put(COLUMN_IMAGEN, meal.getImagenResId());
+        values.put(COLUMN_IMAGEN_URI, meal.getImagenUri());
 
         int updated = db.update(
                 TABLE_COMIDAS,
@@ -200,6 +212,7 @@ public class ComidasDbHelper extends SQLiteOpenHelper {
                     values.put(COLUMN_TIPO, tipos[i]);
                     values.put(COLUMN_NOMBRE, tipos[i] + " saludable Día " + dia);
                     values.put(COLUMN_DESCRIPCION, "Receta balanceada con ingredientes frescos.");
+                    values.put(COLUMN_GRAMAJE, 100);
                     values.put(COLUMN_CALORIAS, cal);
                     values.put(COLUMN_CARBS, carbs);
                     values.put(COLUMN_PROTEINAS, protein);
