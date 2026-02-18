@@ -22,7 +22,7 @@ import okhttp3.Response;
 public class GeminiService {
 
     // RECUERDA: Pon una clave nueva porque la anterior la publicaste por error.
-    private static final String API_KEY = "AIzaSyDO-gH8uXCs-5UY2FATJHDBlFuBQw0oC_w";
+    private static final String API_KEY = "none";
     private static final String URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + API_KEY;
 
     private final OkHttpClient client = new OkHttpClient();
